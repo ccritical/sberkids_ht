@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.ContentScale
 import com.sberkids.ht.R
 import com.sberkids.ht.ui.components.Illustration
+import com.sberkids.ht.ui.components.AnimatedPiggyIllustration
 import com.sberkids.ht.ui.components.MainTopBar
 import com.sberkids.ht.ui.components.ScreenBackground
 import com.sberkids.ht.ui.components.TintedIcon
@@ -130,7 +131,7 @@ fun PiggyBanksScreen(modifier: Modifier = Modifier) {
  * Balance block, measured on the mock: the artwork's clip is 140x176 at
  * (220,112), so the block itself is 360x176; the white sum card is 328x120 with
  * its top at y=144, i.e. 32dp below the block top and 24dp above its bottom.
- * `img_piggy_hero` is the already-clipped group (piggy + 3 sparkles).
+ * The piggy and three sparkles animate independently inside the fixed clip.
  */
 @Composable
 private fun TotalCard() {
@@ -164,12 +165,10 @@ private fun TotalCard() {
                 )
             }
         }
-        Illustration(
-            resId = R.drawable.img_piggy_hero,
+        AnimatedPiggyIllustration(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .size(width = 140.dp, height = 176.dp),
-            contentScale = ContentScale.Crop,
         )
     }
 }

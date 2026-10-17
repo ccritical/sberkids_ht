@@ -45,6 +45,7 @@ import com.sberkids.ht.R
 import com.sberkids.ht.ui.components.HomeBackground
 import com.sberkids.ht.ui.components.Illustration
 import com.sberkids.ht.ui.components.MainTopBar
+import com.sberkids.ht.ui.components.PopcornMotionOverlay
 import com.sberkids.ht.ui.components.TintedIcon
 import com.sberkids.ht.ui.theme.AccentBlue
 import com.sberkids.ht.ui.theme.AccentGreen
@@ -88,6 +89,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             item { Spacer(Modifier.height(15.dp)) }
             item { HistoryBlock() }
         }
+        PopcornMotionOverlay(modifier = Modifier.matchParentSize())
     }
 }
 
