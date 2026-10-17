@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import com.sberkids.ht.ui.theme.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -149,18 +149,16 @@ private fun TotalCard() {
                 .background(Surface),
         ) {
             Column(modifier = Modifier.padding(start = 25.dp, top = 39.7.dp)) {
-                Text(
+                AppText(
                     text = stringResource(R.string.piggy_total_title),
                     fontSize = 22.sp,
                     lineHeight = 22.sp,
-                    fontWeight = FontWeight.Bold,
                     color = PrimaryText,
                 )
                 Spacer(Modifier.height(12.dp))
-                Text(
+                AppText(
                     text = stringResource(R.string.piggy_total_caption),
                     fontSize = 11.sp,
-                    fontWeight = FontWeight.Medium,
                     color = TertiaryText,
                 )
             }
@@ -189,17 +187,15 @@ private fun AllPiggyRow() {
                 .padding(horizontal = 25.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
+            AppText(
                 text = stringResource(R.string.piggy_total_footnote),
                 fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold,
                 color = PrimaryText,
                 modifier = Modifier.weight(1f),
             )
-            Text(
+            AppText(
                 text = stringResource(R.string.piggy_total_percent),
                 fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
                 color = PrimaryText,
             )
         }
@@ -269,11 +265,10 @@ private fun PiggyCellCard(cell: PiggyCell) {
                 // Completed cell: white two-line caption at y=33, then a 130x24
                 // gradient button at y=76. No amount, no progress bar.
                 Spacer(Modifier.height(33.dp))
-                Text(
+                AppText(
                     text = cell.caption,
                     fontSize = 14.sp,
                     lineHeight = 17.sp,
-                    fontWeight = FontWeight.Bold,
                     color = Color.White,
                     modifier = Modifier.width(142.dp),
                 )
@@ -286,38 +281,34 @@ private fun PiggyCellCard(cell: PiggyCell) {
                         .background(Brush.linearGradient(*ButtonGradient)),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(
+                    AppText(
                         text = cell.ctaLabel.orEmpty(),
                         fontSize = 10.sp,
                         lineHeight = 11.sp,
-                        fontWeight = FontWeight.Bold,
                         color = PrimaryText,
                     )
                 }
             } else {
                 Spacer(Modifier.height(37.dp))
                 Row(verticalAlignment = Alignment.Bottom) {
-                    Text(
+                    AppText(
                         text = cell.amount,
                         fontSize = 15.sp,
                         lineHeight = 15.sp,
-                        fontWeight = FontWeight.ExtraBold,
                         color = PrimaryText,
                     )
                     if (cell.goal.isNotEmpty()) {
                         Spacer(Modifier.width(2.dp))
-                        Text(
+                        AppText(
                             text = stringResource(R.string.piggy_currency),
                             fontSize = 11.sp,
-                            fontWeight = FontWeight.Medium,
                             color = TertiaryText,
                             modifier = Modifier.padding(bottom = 1.dp),
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text(
+                        AppText(
                             text = cell.goal,
                             fontSize = 11.sp,
-                            fontWeight = FontWeight.Medium,
                             color = TertiaryText,
                             modifier = Modifier.padding(bottom = 1.dp),
                         )
@@ -332,11 +323,10 @@ private fun PiggyCellCard(cell: PiggyCell) {
                     Spacer(Modifier.height(8.dp))
                 }
 
-                Text(
+                AppText(
                     text = cell.caption,
                     fontSize = 12.sp,
                     lineHeight = 14.sp,
-                    fontWeight = FontWeight.Bold,
                     color = PrimaryText,
                     maxLines = 1,
                 )
@@ -382,10 +372,9 @@ private fun CreateButton() {
                 size = 18.dp,
             )
             Spacer(Modifier.width(10.dp))
-            Text(
+            AppText(
                 text = stringResource(R.string.piggy_create),
                 fontSize = 14.sp,
-                fontWeight = FontWeight.ExtraBold,
                 color = PrimaryText,
             )
         }
@@ -408,11 +397,10 @@ private fun OthersCard() {
             .clip(RoundedCornerShape(20.dp))
             .background(Surface),
     ) {
-        Text(
+        AppText(
             text = stringResource(R.string.piggy_others_title),
             fontSize = 16.sp,
             lineHeight = 18.sp,
-            fontWeight = FontWeight.Bold,
             color = PrimaryText,
             modifier = Modifier.padding(start = 26.dp, top = 29.dp),
         )
@@ -436,10 +424,9 @@ private fun SeeAllButton() {
             .background(Brush.linearGradient(CtaGradient)),
         contentAlignment = Alignment.Center,
     ) {
-        Text(
+        AppText(
             text = stringResource(R.string.piggy_see_all),
             fontSize = 14.sp,
-            fontWeight = FontWeight.ExtraBold,
             color = PrimaryText,
         )
     }
@@ -485,11 +472,10 @@ private fun Carousel() {
                         .offset(x = 24.dp, y = 24.dp)
                         .size(176.dp),
                 )
-                Text(
+                AppText(
                     text = card.title,
                     fontSize = 13.sp,
                     lineHeight = 15.sp,
-                    fontWeight = FontWeight.Bold,
                     color = PrimaryText,
                     maxLines = 2,
                     modifier = Modifier
@@ -503,17 +489,15 @@ private fun Carousel() {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.Bottom) {
-                        Text(
+                        AppText(
                             text = card.amount,
                             fontSize = 15.sp,
-                            fontWeight = FontWeight.ExtraBold,
                             color = PrimaryText,
                         )
                         Spacer(Modifier.width(2.dp))
-                        Text(
+                        AppText(
                             text = stringResource(R.string.piggy_currency),
                             fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
                             color = TertiaryText,
                         )
                     }
@@ -559,17 +543,15 @@ private fun ArchiveRow() {
                 size = 20.dp,
             )
             Spacer(Modifier.width(14.dp))
-            Text(
+            AppText(
                 text = stringResource(R.string.piggy_archive),
                 fontSize = 13.sp,
-                fontWeight = FontWeight.Bold,
                 color = PrimaryText,
                 modifier = Modifier.weight(1f),
             )
-            Text(
+            AppText(
                 text = stringResource(R.string.piggy_count),
                 fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
                 color = TertiaryText,
             )
         }

@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import com.sberkids.ht.ui.theme.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.layout.onSizeChanged
@@ -145,18 +145,16 @@ private fun BalanceCard() {
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.Bottom,
                 ) {
-                    Text(
+                    AppText(
                         text = stringResource(R.string.home_balance_amount),
                         fontSize = 20.sp,
                         lineHeight = 20.sp,
-                        fontWeight = FontWeight.Bold,
                         color = PrimaryText,
                     )
-                    Text(
+                    AppText(
                         text = stringResource(R.string.home_balance_cents),
                         fontSize = 20.sp,
                         lineHeight = 20.sp,
-                        fontWeight = FontWeight.Bold,
                         color = TertiaryText,
                     )
                 }
@@ -170,10 +168,9 @@ private fun BalanceCard() {
                         .padding(start = 24.9.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
+                    AppText(
                         text = stringResource(R.string.home_bonus_amount),
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
                         color = PrimaryText,
                     )
                     Spacer(Modifier.width(2.dp))
@@ -186,7 +183,9 @@ private fun BalanceCard() {
             }
         }
 
-        // Pager dots sit under the strip at y=228.8: 28x6 plus two 6x6, all black.
+        // Pager pills under the strip. The mock paints them black at 20% (active)
+        // and 10% (the two idle ones), not solid - a full-strength black here is
+        // what read as a hard line beneath the balance.
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -198,21 +197,21 @@ private fun BalanceCard() {
                 modifier = Modifier
                     .size(width = 28.dp, height = 6.dp)
                     .clip(CircleShape)
-                    .background(PrimaryText),
+                    .background(PrimaryText.copy(alpha = 0.20f)),
             )
             Spacer(Modifier.width(6.dp))
             Box(
                 modifier = Modifier
                     .size(6.dp)
                     .clip(CircleShape)
-                    .background(PrimaryText),
+                    .background(PrimaryText.copy(alpha = 0.10f)),
             )
             Spacer(Modifier.width(6.dp))
             Box(
                 modifier = Modifier
                     .size(6.dp)
                     .clip(CircleShape)
-                    .background(PrimaryText),
+                    .background(PrimaryText.copy(alpha = 0.10f)),
             )
         }
     }
@@ -232,10 +231,9 @@ private fun QuickActionsRow() {
                     .clip(RoundedCornerShape(20.dp))
                     .background(Surface),
             ) {
-                Text(
+                AppText(
                     text = stringResource(R.string.home_action_qr_short),
                     fontSize = 10.sp,
-                    fontWeight = FontWeight.SemiBold,
                     color = PrimaryText,
                     modifier = Modifier.padding(start = 26.dp, top = 20.dp),
                 )
@@ -304,11 +302,10 @@ private fun ActionTile(
             .clip(RoundedCornerShape(20.dp))
             .background(Surface),
     ) {
-        Text(
+        AppText(
             text = label,
             fontSize = 14.sp,
             lineHeight = 16.sp,
-            fontWeight = FontWeight.SemiBold,
             color = PrimaryText,
             modifier = Modifier.padding(start = 24.dp, top = 20.dp, end = 16.dp),
         )
@@ -394,20 +391,18 @@ private fun PromoBanner() {
                 .padding(start = 24.2.dp, top = 25.4.dp)
                 .width(174.3.dp),
         ) {
-            Text(
+            AppText(
                 text = stringResource(R.string.home_banner_title),
                 fontSize = 14.sp,
                 lineHeight = 17.sp,
-                fontWeight = FontWeight.Bold,
                 color = Color.White,
                 maxLines = 2,
             )
             Spacer(Modifier.height(8.dp))
-            Text(
+            AppText(
                 text = stringResource(R.string.home_banner_text),
                 fontSize = 11.sp,
                 lineHeight = 11.sp,
-                fontWeight = FontWeight.Medium,
                 color = Color.White,
                 maxLines = 1,
             )
@@ -473,11 +468,10 @@ private fun HistoryBlock() {
                 .height(56.dp),
             contentAlignment = Alignment.CenterStart,
         ) {
-            Text(
+            AppText(
                 text = stringResource(R.string.home_history_title),
                 fontSize = 18.sp,
                 lineHeight = 21.sp,
-                fontWeight = FontWeight.SemiBold,
                 color = PrimaryText,
                 modifier = Modifier.padding(start = 17.8.dp),
             )
@@ -508,10 +502,9 @@ private fun HistoryBlock() {
                 .background(Surface),
             contentAlignment = Alignment.Center,
         ) {
-            Text(
+            AppText(
                 text = stringResource(R.string.home_history_show_all),
                 fontSize = 14.sp,
-                fontWeight = FontWeight.ExtraBold,
                 color = PrimaryText,
             )
         }
@@ -540,37 +533,33 @@ private fun HistoryCell(row: HistoryRow) {
                 .padding(start = 20.dp)
                 .weight(1f),
         ) {
-            Text(
+            AppText(
                 text = row.title,
                 fontSize = 13.sp,
                 lineHeight = 16.sp,
-                fontWeight = FontWeight.SemiBold,
                 color = PrimaryText,
                 maxLines = 1,
             )
-            Text(
+            AppText(
                 text = row.description,
                 fontSize = 12.sp,
                 lineHeight = 15.sp,
-                fontWeight = FontWeight.Medium,
                 color = SecondaryText,
                 maxLines = 1,
             )
         }
         // Bonus badge sits under the amount, right-aligned, only when present.
         Column(horizontalAlignment = Alignment.End) {
-            Text(
+            AppText(
                 text = row.amount,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.ExtraBold,
                 color = if (row.positive) AccentGreenText else PrimaryText,
             )
             if (row.bonus != null) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
+                    AppText(
                         text = row.bonus,
                         fontSize = 11.sp,
-                        fontWeight = FontWeight.SemiBold,
                         color = AccentGreenText,
                     )
                     Spacer(Modifier.width(3.dp))

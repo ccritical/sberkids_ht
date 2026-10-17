@@ -23,7 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.ui.res.painterResource
-import androidx.compose.material3.Text
+import com.sberkids.ht.ui.theme.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -229,18 +229,17 @@ private fun StreamPlayer() {
                 .offset(x = 136.dp, y = 29.dp)
                 .width(130.dp),
         ) {
-            Text(
+            AppText(
                 text = stringResource(R.string.content_stream_subtitle),
                 fontSize = 13.sp,
                 color = Color(0xFF7D868C),
                 maxLines = 1,
             )
             Spacer(Modifier.height(8.dp))
-            Text(
+            AppText(
                 text = stringResource(R.string.content_stream_title),
                 fontSize = 15.sp,
                 lineHeight = 18.sp,
-                fontWeight = FontWeight.Bold,
                 color = PrimaryText,
                 maxLines = 2,
             )
@@ -302,7 +301,7 @@ private fun ChipPill(label: String, icon: Int, tint: Color, selected: Boolean = 
     ) {
         TintedIcon(resId = icon, tint = tint, size = 20.dp)
         Spacer(Modifier.width(8.dp))
-        Text(label, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = PrimaryText)
+        AppText(label, fontSize = 13.sp, color = PrimaryText)
     }
 }
 
@@ -344,18 +343,17 @@ private fun ArticleCard(
                 contentScale = ContentScale.Crop,
             )
             TagRow(y = 191.dp * k, scale = k)
-            Text(
+            AppText(
                 text = stringResource(
                     if (tall) R.string.content_card_long else R.string.content_card_short,
                 ),
                 fontSize = (15 * k).sp,
                 lineHeight = (20 * k).sp,
-                fontWeight = FontWeight.SemiBold,
                 color = PrimaryText,
                 maxLines = 2,
                 overflow = TextOverflow.Visible,
                 modifier = Modifier
-                    .offset(x = 17.dp * k, y = 211.5.dp * k)
+                    .offset(x = 17.dp * k, y = 211.dp * k)
                     .padding(end = 17.dp * k)
                     .height(40.dp * k)
                     .fillMaxWidth(),
@@ -389,12 +387,12 @@ private fun TagRow(y: androidx.compose.ui.unit.Dp, scale: Float = 1f) {
             modifier = Modifier.size(width = 10.dp * scale, height = 10.8.dp * scale),
         )
         Spacer(Modifier.width(9.3.dp * scale))
-        Text(
+        AppText(
             text = stringResource(R.string.content_tag_video),
             fontSize = (11 * scale).sp,
             lineHeight = (13 * scale).sp,
             color = TertiaryText,
-            modifier = Modifier.offset(y = (-1.5 * scale).dp),
+            modifier = Modifier.offset(y = (-2 * scale).dp),
         )
     }
 }
@@ -416,12 +414,12 @@ private fun LikesRow(y: androidx.compose.ui.unit.Dp, scale: Float = 1f) {
             modifier = Modifier.size(width = 12.dp * scale, height = 10.7.dp * scale),
         )
         Spacer(Modifier.width(6.6.dp * scale))
-        Text(
+        AppText(
             text = stringResource(R.string.content_likes),
             fontSize = (11 * scale).sp,
             lineHeight = (13 * scale).sp,
             color = TertiaryText,
-            modifier = Modifier.offset(y = (-1.5 * scale).dp),
+            modifier = Modifier.offset(y = (-2 * scale).dp),
         )
     }
 }
@@ -488,14 +486,13 @@ private fun InfoBanner() {
             contentScale = ContentScale.Crop,
         )
         Column(modifier = Modifier.padding(start = 24.dp, top = 29.dp)) {
-            Text(
+            AppText(
                 text = stringResource(R.string.content_banner_title),
                 fontSize = 16.sp,
-                fontWeight = FontWeight.ExtraBold,
                 color = Color.White,
             )
             Spacer(Modifier.height(8.dp))
-            Text(
+            AppText(
                 text = stringResource(R.string.content_banner_text),
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
@@ -515,7 +512,7 @@ private fun InfoBanner() {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Spacer(Modifier.width(9.dp))
-            Text(
+            AppText(
                 text = stringResource(R.string.content_ad),
                 fontSize = 9.sp,
                 color = PrimaryText,
@@ -534,11 +531,10 @@ private fun InfoBanner() {
 
 @Composable
 private fun SectionTitle(text: String) {
-    Text(
+    AppText(
         text = text,
         fontSize = 20.sp,
         lineHeight = 22.sp,
-        fontWeight = FontWeight.Bold,
         color = PrimaryText,
         modifier = Modifier.padding(start = 16.dp),
     )
@@ -589,17 +585,16 @@ private fun SmallCard(image: Int, seen: Boolean) {
         ) {
             TintedIcon(R.drawable.ic_16_mono_play, TertiaryText, size = 10.dp)
             Spacer(Modifier.width(6.dp))
-            Text(
+            AppText(
                 text = stringResource(R.string.content_tag_video),
                 fontSize = 11.sp,
                 color = TertiaryText,
             )
         }
-        Text(
+        AppText(
             text = stringResource(R.string.content_card_long),
             fontSize = 13.sp,
             lineHeight = 15.sp,
-            fontWeight = FontWeight.SemiBold,
             color = PrimaryText,
             maxLines = 2,
             overflow = TextOverflow.Visible,
@@ -627,10 +622,9 @@ private fun AlgoritmikaBlock() {
             .height(372.dp)
             .background(ToneContent),
     ) {
-        Text(
+        AppText(
             text = stringResource(R.string.content_partners_title),
             fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
             color = PrimaryText,
             modifier = Modifier.padding(start = 16.dp, top = 31.dp),
         )
@@ -673,16 +667,15 @@ private fun PlaceholderCard() {
             contentScale = ContentScale.Crop,
         )
         TagRow(y = 191.dp)
-        Text(
+        AppText(
             text = stringResource(R.string.content_card_three_lines),
             fontSize = 15.sp,
             lineHeight = 20.sp,
-            fontWeight = FontWeight.SemiBold,
             color = PrimaryText,
             maxLines = 3,
             overflow = TextOverflow.Visible,
             modifier = Modifier
-                .offset(x = 17.dp, y = 211.5.dp)
+                .offset(x = 17.dp, y = 211.dp)
                 .padding(end = 17.dp)
                 .height(60.dp)
                 .fillMaxWidth(),
