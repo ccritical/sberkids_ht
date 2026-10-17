@@ -79,5 +79,8 @@ val BannerGradient = listOf(
 /** Neutral card surface on the tasks tab. */
 val TasksCardBg = Color(0xFFF2F5F7)
 
+/** Light button surface at the bottom of the checklist card. */
+val TasksMoreButton = Color(0xFFE4EBF0)
+
 /** Muted description text on the tasks banner. */
 val TasksMuted = Color(0xFFA8B4BD)

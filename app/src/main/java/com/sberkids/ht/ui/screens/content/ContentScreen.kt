@@ -33,8 +33,8 @@ import com.sberkids.ht.R
 import com.sberkids.ht.ui.components.AppCard
 import com.sberkids.ht.ui.components.Footnote
 import com.sberkids.ht.ui.components.Illustration
-import com.sberkids.ht.ui.components.LabelChip
 import com.sberkids.ht.ui.components.MainTopBar
+import com.sberkids.ht.ui.components.LabelChip
 import com.sberkids.ht.ui.components.ProgressBar
 import com.sberkids.ht.ui.components.ScreenBackground
 import com.sberkids.ht.ui.components.TintedIcon
@@ -56,24 +56,23 @@ fun ContentScreen(modifier: Modifier = Modifier) {
         secondary = BlobPurpleLight,
         modifier = modifier,
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            MainTopBar()
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = 8.dp, bottom = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                item { StoryCarousel() }
-                item { CategoryChips() }
-                item { StreamPlayer() }
-                item { FeaturedCard() }
-                item { InfoBanner() }
-                item { TopFiveHeader() }
-                item { TopFiveRow() }
-                item { WideCard() }
-                item { PartnersBanner() }
-                item { CompactCard() }
-            }
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            item { MainTopBar() }
+            item { Spacer(Modifier.height(8.dp)) }
+            item { StoryCarousel() }
+            item { CategoryChips() }
+            item { StreamPlayer() }
+            item { FeaturedCard() }
+            item { InfoBanner() }
+            item { TopFiveHeader() }
+            item { TopFiveRow() }
+            item { WideCard() }
+            item { PartnersBanner() }
+            item { CompactCard() }
         }
     }
 }

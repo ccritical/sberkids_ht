@@ -75,39 +75,49 @@ fun PiggyBanksScreen(modifier: Modifier = Modifier) {
         modifier = modifier,
     ) {
         val cells = piggyCells()
-        Column(modifier = Modifier.fillMaxSize()) {
-            MainTopBar(
-                actions = {
-                    TintedIcon(
-                        resId = R.drawable.ic_24_mono_plus,
-                        tint = AccentGreen,
-                        size = 18.dp,
-                    )
-                },
-            )
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 24.dp),
-            ) {
-                item { TotalCard() }
-                item { Spacer(Modifier.height(10.dp)) }
-                item { AllPiggyRow() }
-                item { Spacer(Modifier.height(10.dp)) }
-                item {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 24.dp),
+        ) {
+            item {
+                MainTopBar(
+                    actions = {
+                        TintedIcon(
+                            resId = R.drawable.ic_24_mono_plus,
+                            tint = AccentGreen,
+                            size = 18.dp,
+                        )
+                    },
+                )
+            }
+            item {
+                Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+                    TotalCard()
+                }
+            }
+            item { Spacer(Modifier.height(10.dp)) }
+            item {
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    AllPiggyRow()
+                }
+            }
+            item { Spacer(Modifier.height(10.dp)) }
+            item {
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     cells.forEachIndexed { index, cell ->
                         PiggyCellCard(cell)
                         if (index < cells.lastIndex) Spacer(Modifier.height(16.dp))
                     }
                 }
-                item { Spacer(Modifier.height(24.dp)) }
-                item { CreateButton() }
-                item { Spacer(Modifier.height(24.dp)) }
-                item { CarouselTitle() }
-                item { Spacer(Modifier.height(12.dp)) }
-                item { Carousel() }
-                item { Spacer(Modifier.height(24.dp)) }
-                item { ArchiveRow() }
             }
+            item { Spacer(Modifier.height(24.dp)) }
+            item { CreateButton() }
+            item { Spacer(Modifier.height(24.dp)) }
+            item { CarouselTitle() }
+            item { Spacer(Modifier.height(12.dp)) }
+            item { Carousel() }
+            item { Spacer(Modifier.height(24.dp)) }
+            item { ArchiveRow() }
         }
     }
 }

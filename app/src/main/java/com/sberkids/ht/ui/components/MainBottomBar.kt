@@ -68,7 +68,7 @@ fun MainBottomBar(
                 .fillMaxWidth()
                 .padding(start = 12.dp, end = 12.dp, top = 24.dp, bottom = 16.dp)
                 .height(barHeight)
-                .clip(RoundedCornerShape(28.dp))
+                .clip(RoundedCornerShape(24.dp))
                 .background(Surface),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly,

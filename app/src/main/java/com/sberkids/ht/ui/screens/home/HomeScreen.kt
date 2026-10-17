@@ -66,22 +66,27 @@ import com.sberkids.ht.ui.theme.TertiaryText
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
     HomeBackground(modifier = modifier) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            MainTopBar()
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                // Card sits at y=101 in the mock, nav is 88 -> 13dp gap.
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 13.dp, bottom = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(0.dp),
-            ) {
-                item { BalanceCard() }
-                item { Spacer(Modifier.height(40.dp)) }
-                item { QuickActionsRow() }
-                item { Spacer(Modifier.height(40.dp)) }
-                item { PromoBanner() }
-                item { Spacer(Modifier.height(15.dp)) }
-                item { HistoryBlock() }
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp),
+        ) {
+            // The bar scrolls with the content: it is the first list item, not
+            // a pinned overlay.
+            item { MainTopBar(height = 88.dp) }
+            item {
+                Column(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 13.dp),
+                ) {
+                    BalanceCard()
+                    Spacer(Modifier.height(40.dp))
+                    QuickActionsRow()
+                    Spacer(Modifier.height(40.dp))
+                }
             }
+            item { PromoBanner() }
+            item { Spacer(Modifier.height(15.dp)) }
+            item { HistoryBlock() }
         }
     }
 }
