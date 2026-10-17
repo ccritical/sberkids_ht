@@ -11,6 +11,8 @@ val AccentGreen = Color(0xFF19D13B)
 val AccentGreenText = Color(0xFF24B23E)
 val AccentBlue = Color(0xFF52BAFF)
 val AccentPink = Color(0xFFFF5297)
+val ContentProgressTrack = Color(0xFFEBEDF2)
+
 val AccentPurple = Color(0xFFB385FF)
 val DoodlePink = Color(0xFFF17AFF)
 

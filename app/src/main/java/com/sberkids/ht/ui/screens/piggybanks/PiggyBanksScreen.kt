@@ -30,13 +30,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.ContentScale
 import com.sberkids.ht.R
 import com.sberkids.ht.ui.components.Illustration
 import com.sberkids.ht.ui.components.MainTopBar
 import com.sberkids.ht.ui.components.ScreenBackground
 import com.sberkids.ht.ui.components.TintedIcon
 import com.sberkids.ht.ui.theme.AccentGreen
+import com.sberkids.ht.ui.theme.AccentBlue
 import com.sberkids.ht.ui.theme.AccentGreenText
+import com.sberkids.ht.ui.theme.MutedIcon
 import com.sberkids.ht.ui.theme.BlobPinkSoft
 import com.sberkids.ht.ui.theme.BlobYellow
 import com.sberkids.ht.ui.theme.ButtonGradient
@@ -90,12 +93,8 @@ fun PiggyBanksScreen(modifier: Modifier = Modifier) {
                     },
                 )
             }
-            item {
-                Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
-                    TotalCard()
-                }
-            }
-            item { Spacer(Modifier.height(10.dp)) }
+            item { TotalCard() }
+            item { Spacer(Modifier.height(8.dp)) }
             item {
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     AllPiggyRow()
@@ -111,53 +110,67 @@ fun PiggyBanksScreen(modifier: Modifier = Modifier) {
                 }
             }
             item { Spacer(Modifier.height(24.dp)) }
-            item { CreateButton() }
+            item {
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    CreateButton()
+                }
+            }
             item { Spacer(Modifier.height(24.dp)) }
-            item { CarouselTitle() }
-            item { Spacer(Modifier.height(12.dp)) }
-            item { Carousel() }
+            // "На что копят другие" is one white 328x500 card: heading at the
+            // top, the card strip in the middle, the CTA pinned 24dp above the
+            // bottom edge. The strip bleeds past the card and is clipped by it.
+            item { OthersCard() }
             item { Spacer(Modifier.height(24.dp)) }
             item { ArchiveRow() }
         }
     }
 }
 
-/** 328x120 white card: total on the left, big piggy artwork clipped on the right. */
+/**
+ * Balance block, measured on the mock: the artwork's clip is 140x176 at
+ * (220,112), so the block itself is 360x176; the white sum card is 328x120 with
+ * its top at y=144, i.e. 32dp below the block top and 24dp above its bottom.
+ * `img_piggy_hero` is the already-clipped group (piggy + 3 sparkles).
+ */
 @Composable
 private fun TotalCard() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Surface),
+            .height(176.dp),
     ) {
+        Box(
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, top = 32.dp)
+                .fillMaxWidth()
+                .height(120.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(Surface),
+        ) {
+            Column(modifier = Modifier.padding(start = 25.dp, top = 39.7.dp)) {
+                Text(
+                    text = stringResource(R.string.piggy_total_title),
+                    fontSize = 22.sp,
+                    lineHeight = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = PrimaryText,
+                )
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = stringResource(R.string.piggy_total_caption),
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = TertiaryText,
+                )
+            }
+        }
         Illustration(
             resId = R.drawable.img_piggy_hero,
             modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .offset(x = 20.dp, y = 8.dp)
-                .size(width = 172.dp, height = 172.dp),
+                .align(Alignment.TopEnd)
+                .size(width = 140.dp, height = 176.dp),
+            contentScale = ContentScale.Crop,
         )
-        Column(
-            modifier = Modifier
-                .padding(start = 25.dp, top = 40.dp),
-        ) {
-            Text(
-                text = stringResource(R.string.piggy_total_title),
-                fontSize = 22.sp,
-                lineHeight = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = PrimaryText,
-            )
-            Spacer(Modifier.height(12.dp))
-            Text(
-                text = stringResource(R.string.piggy_total_caption),
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Medium,
-                color = TertiaryText,
-            )
-        }
     }
 }
 
@@ -380,58 +393,95 @@ private fun CreateButton() {
     }
 }
 
+
+/**
+ * "На что копят другие" block, measured on the mock: a white 328x500 card at
+ * r=20 holding a 215x18 heading at (26,29), a 704dp-wide card strip starting at
+ * x=24 and y=72 (clipped by the card), and a 280x56 gradient CTA at (24,420).
+ */
 @Composable
-private fun CarouselTitle() {
-    Text(
-        text = stringResource(R.string.piggy_others_title),
-        fontSize = 16.sp,
-        lineHeight = 18.sp,
-        fontWeight = FontWeight.Bold,
-        color = PrimaryText,
-        modifier = Modifier.padding(start = 2.dp),
-    )
+private fun OthersCard() {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .height(500.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Surface),
+    ) {
+        Text(
+            text = stringResource(R.string.piggy_others_title),
+            fontSize = 16.sp,
+            lineHeight = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = PrimaryText,
+            modifier = Modifier.padding(start = 26.dp, top = 29.dp),
+        )
+        Spacer(Modifier.height(25.dp))
+        Carousel()
+        Spacer(Modifier.weight(1f))
+        SeeAllButton()
+        Spacer(Modifier.height(24.dp))
+    }
+}
+
+/** 280x56 gradient CTA pinned to the bottom of the block. */
+@Composable
+private fun SeeAllButton() {
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
+            .fillMaxWidth()
+            .height(56.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Brush.linearGradient(CtaGradient)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.piggy_see_all),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = PrimaryText,
+        )
+    }
 }
 
 private data class CarouselCard(
     val title: String,
     val amount: String,
-    val image: Int,
 )
 
-/** Three 224x324 cards, 16dp apart; the third peeks in from the right edge. */
+/** 224x324 cards, 16dp apart, bleeding past the card edge as in the mock. */
 @Composable
 private fun Carousel() {
     val cards = listOf(
         CarouselCard(
             stringResource(R.string.piggy_carousel_1_title),
             stringResource(R.string.piggy_carousel_1_amount),
-            R.drawable.img_piggy_1,
         ),
         CarouselCard(
             stringResource(R.string.piggy_carousel_2_title),
             stringResource(R.string.piggy_carousel_2_amount),
-            R.drawable.img_piggy_2,
         ),
         CarouselCard(
             stringResource(R.string.piggy_carousel_3_title),
             stringResource(R.string.piggy_carousel_3_amount),
-            R.drawable.img_piggy_3,
         ),
     )
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(end = 16.dp),
+        contentPadding = PaddingValues(start = 24.dp, end = 16.dp),
     ) {
         items(cards) { card ->
             Box(
                 modifier = Modifier
                     .width(224.dp)
                     .height(324.dp)
-                    .clip(RoundedCornerShape(24.dp))
+                    .clip(RoundedCornerShape(12.dp))
                     .background(PiggyCardBg),
             ) {
                 Illustration(
-                    resId = card.image,
+                    resId = R.drawable.img_piggy_carousel,
                     modifier = Modifier
                         .offset(x = 24.dp, y = 24.dp)
                         .size(176.dp),
@@ -472,7 +522,7 @@ private fun Carousel() {
                         modifier = Modifier
                             .size(32.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .background(com.sberkids.ht.ui.theme.AccentBlue),
+                            .background(AccentBlue),
                         contentAlignment = Alignment.Center,
                     ) {
                         TintedIcon(
@@ -505,8 +555,9 @@ private fun ArchiveRow() {
         ) {
             TintedIcon(
                 resId = R.drawable.ic_24_mono_arhive,
-                tint = AccentGreen,
-                size = 18.dp,
+                // Figma paints this icon #A3C2DB, not the green used elsewhere.
+                tint = MutedIcon,
+                size = 20.dp,
             )
             Spacer(Modifier.width(14.dp))
             Text(
