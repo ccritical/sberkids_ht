@@ -4,17 +4,18 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -25,16 +26,13 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
 import com.sberkids.ht.R
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.flow.collectLatest
+import android.os.SystemClock
 import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.math.roundToInt
@@ -141,25 +139,22 @@ private fun easing(css: String): Easing = when (css) {
     }
 }
 
-/** All layers share one clock. Background playback is paused, and the live
- * Android animator duration scale disables playback at the resting frame.
- */
+/** Plays one timeline pass whenever [trigger] changes, then returns to frame 0. */
 @Composable
-private fun rememberTimelineTime(durationMs: Int): State<Float> {
+private fun rememberTriggeredTimelineTime(
+    durationMs: Int,
+    trigger: Int,
+    shouldPlay: Boolean,
+    onAnimationStarted: () -> Unit = {},
+): State<Float> {
     val clock = remember { Animatable(0f) }
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-    LaunchedEffect(lifecycle, durationMs) {
-        val durationScale = currentCoroutineContext()[MotionDurationScale]
-        lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            snapshotFlow { durationScale?.scaleFactor ?: 1f }.collectLatest { scale ->
-                clock.snapTo(0f)
-                if (scale > 0f) {
-                    clock.animateTo(
-                        1f,
-                        infiniteRepeatable(tween(durationMs, easing = LinearEasing), RepeatMode.Restart),
-                    )
-                }
-            }
+    val onAnimationStartedState = rememberUpdatedState(onAnimationStarted)
+    LaunchedEffect(durationMs, trigger) {
+        if (trigger > 0 && shouldPlay) {
+            clock.snapTo(0f)
+            onAnimationStartedState.value()
+            clock.animateTo(1f, tween(durationMs, easing = LinearEasing))
+            clock.snapTo(0f)
         }
     }
     return clock.asState()
@@ -169,9 +164,19 @@ private fun rememberTimelineTime(durationMs: Int): State<Float> {
  * pass through. Uniform scaling preserves the design's particle trajectories.
  */
 @Composable
-fun PopcornMotionOverlay(modifier: Modifier = Modifier) {
+fun PopcornMotionOverlay(
+    modifier: Modifier = Modifier,
+    trigger: Int = 0,
+    lastStartedTrigger: Int = 0,
+    onAnimationStarted: () -> Unit = {},
+) {
     val timeline = rememberIllustrationTimeline()
-    val time = rememberTimelineTime(timeline.durationMs)
+    val time = rememberTriggeredTimelineTime(
+        durationMs = timeline.durationMs,
+        trigger = trigger,
+        shouldPlay = trigger > lastStartedTrigger,
+        onAnimationStarted = onAnimationStarted,
+    )
     val popcorn = ImageBitmap.imageResource(R.drawable.motion_popcorn_sheet)
     val nodes = remember(timeline) { timeline.nodes.filter { it.id.startsWith("6:") } }
     Canvas(modifier.clipToBounds()) {
@@ -186,7 +191,14 @@ fun PopcornMotionOverlay(modifier: Modifier = Modifier) {
 @Composable
 fun AnimatedPiggyIllustration(modifier: Modifier = Modifier) {
     val timeline = rememberIllustrationTimeline()
-    val time = rememberTimelineTime(timeline.durationMs)
+    var trigger by remember { mutableIntStateOf(0) }
+    var lastStartedTrigger by remember { mutableIntStateOf(0) }
+    val time = rememberTriggeredTimelineTime(
+        durationMs = timeline.durationMs,
+        trigger = trigger,
+        shouldPlay = trigger > lastStartedTrigger,
+        onAnimationStarted = { lastStartedTrigger = trigger },
+    )
     val piggy = ImageBitmap.imageResource(R.drawable.motion_piggy)
     val sparkles = listOf(
         ImageBitmap.imageResource(R.drawable.motion_piggy_sparkle_1),
@@ -194,7 +206,23 @@ fun AnimatedPiggyIllustration(modifier: Modifier = Modifier) {
         ImageBitmap.imageResource(R.drawable.motion_piggy_sparkle_3),
     )
     val nodes = remember(timeline) { timeline.nodes.filter { !it.id.startsWith("6:") } }
-    Canvas(modifier.clipToBounds()) {
+    Canvas(
+        modifier
+            .clipToBounds()
+            .pointerInput(Unit) {
+                var tapCount = 0
+                var lastTapAt = 0L
+                detectTapGestures {
+                    val now = SystemClock.uptimeMillis()
+                    tapCount = if (now - lastTapAt > TRIPLE_TAP_TIMEOUT_MS) 1 else tapCount + 1
+                    lastTapAt = now
+                    if (tapCount == 3) {
+                        trigger++
+                        tapCount = 0
+                    }
+                }
+            },
+    ) {
         withTransform({
             scale(size.width / 140f, size.height / 176f, Offset.Zero)
             translate(-220f, -112f)
@@ -244,3 +272,4 @@ private fun DrawScope.drawMotionNode(node: MotionNode, time: Float, bitmap: Imag
 }
 
 private const val RADIANS_TO_DEGREES = 57.29578f
+private const val TRIPLE_TAP_TIMEOUT_MS = 800L

@@ -1,5 +1,10 @@
 package com.sberkids.ht.ui
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,12 +21,16 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -41,6 +50,7 @@ import com.sberkids.ht.ui.screens.tasks.TasksScreen
 import com.sberkids.ht.ui.theme.AppBackground
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.em
+import androidx.core.content.ContextCompat
 import com.sberkids.ht.ui.theme.MOCK_WEIGHT
 import com.sberkids.ht.ui.theme.MOCK_SPACING_EM
 import com.sberkids.ht.ui.theme.Inter14
@@ -49,6 +59,8 @@ import com.sberkids.ht.ui.theme.SberKidsHtTheme
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     var selectedTab by rememberSaveable { mutableStateOf(MainTab.Home) }
+    val popcornTrigger = rememberPowerConnectionTrigger()
+    var popcornLastStartedTrigger by remember { mutableIntStateOf(0) }
 
 
     // Base style for anything that does not set a size. Sized text goes through
@@ -100,7 +112,13 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     label = "tabContent",
                 ) { tab ->
                     when (tab) {
-                        MainTab.Home -> HomeScreen()
+                        MainTab.Home -> HomeScreen(
+                            popcornTrigger = popcornTrigger,
+                            popcornLastStartedTrigger = popcornLastStartedTrigger,
+                            onPopcornAnimationStarted = {
+                                popcornLastStartedTrigger = popcornTrigger
+                            },
+                        )
                         MainTab.PiggyBanks -> PiggyBanksScreen()
                         MainTab.Tasks -> TasksScreen()
                         MainTab.Content -> ContentScreen()
@@ -109,6 +127,29 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+@Composable
+private fun rememberPowerConnectionTrigger(): Int {
+    val context = LocalContext.current.applicationContext
+    val trigger = remember { mutableIntStateOf(0) }
+
+    DisposableEffect(context) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == Intent.ACTION_POWER_CONNECTED) trigger.intValue++
+            }
+        }
+        ContextCompat.registerReceiver(
+            context,
+            receiver,
+            IntentFilter(Intent.ACTION_POWER_CONNECTED),
+            ContextCompat.RECEIVER_EXPORTED,
+        )
+        onDispose { context.unregisterReceiver(receiver) }
+    }
+
+    return trigger.intValue
 }
 
 @Preview(showBackground = true, widthDp = 390, heightDp = 1182)

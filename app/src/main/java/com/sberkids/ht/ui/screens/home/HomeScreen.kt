@@ -65,7 +65,12 @@ import com.sberkids.ht.ui.theme.Surface
 import com.sberkids.ht.ui.theme.TertiaryText
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    popcornTrigger: Int = 0,
+    popcornLastStartedTrigger: Int = 0,
+    onPopcornAnimationStarted: () -> Unit = {},
+) {
     HomeBackground(modifier = modifier) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -89,7 +94,12 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             item { Spacer(Modifier.height(15.dp)) }
             item { HistoryBlock() }
         }
-        PopcornMotionOverlay(modifier = Modifier.matchParentSize())
+        PopcornMotionOverlay(
+            modifier = Modifier.matchParentSize(),
+            trigger = popcornTrigger,
+            lastStartedTrigger = popcornLastStartedTrigger,
+            onAnimationStarted = onPopcornAnimationStarted,
+        )
     }
 }
 
