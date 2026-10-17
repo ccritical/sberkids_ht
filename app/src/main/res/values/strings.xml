@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SberKids HT</string>
+
+    <string name="tab_home">Главный</string>
+    <string name="tab_piggy_banks">Копилки</string>
+    <string name="tab_tasks">Дела</string>
+    <string name="tab_content">Контент</string>
+
+    <string name="home_balance_amount">7 932</string>
+    <string name="home_balance_cents">,04 ₽</string>
+    <string name="home_bonus_amount">256</string>
+
+    <string name="home_action_qr_short">QR</string>
+    <string name="home_action_qr">Пополнить</string>
+    <string name="home_action_mobile">Пополнить\nмобилку</string>
+    <string name="home_action_send">Скинуть\nденег</string>
+
+    <string name="home_banner_title">Узнай свои сильные\nстороны</string>
+    <string name="home_banner_text">с тестом по профориентации</string>
+
+    <string name="home_history_title">История</string>
+    <string name="home_history_1_title">Товары для дома</string>
+    <string name="home_history_1_subtitle">Маркетплейсы</string>
+    <string name="home_history_1_amount">−2 292 ₽</string>
+    <string name="home_history_1_bonus">+28</string>
+    <string name="home_history_2_title">Купер</string>
+    <string name="home_history_2_subtitle">Супермаркет</string>
+    <string name="home_history_2_amount">−4 686 ₽</string>
+    <string name="home_history_3_title">Мария Валерьевна Р.</string>
+    <string name="home_history_3_subtitle">Клиенту Сбера</string>
+    <string name="home_history_3_amount">−500 ₽</string>
+    <string name="home_history_show_all">Посмотреть историю</string>
+
+    <string name="piggy_total_title">16 158 ₽</string>
+    <string name="piggy_total_footnote">Годовой процент</string>
+    <string name="piggy_total_percent">11%</string>
+    <string name="piggy_favourite">Копилка фаворит</string>
+    <string name="piggy_subtitle">Копилка</string>
+    <string name="piggy_goal_footnote">из 3 000 ₽</string>
+    <string name="piggy_saved">1675,50 ₽</string>
+    <string name="piggy_done_title">Ура! Ты накопил\nна мечту</string>
+    <string name="piggy_more">Ещё</string>
+    <string name="piggy_create">Создать копилку</string>
+    <string name="piggy_archive">Архив</string>
+    <string name="piggy_count">9 копилок</string>
+    <string name="piggy_currency">₽</string>
+
+    <string name="piggy_cell_favourite">Копилка фаворит</string>
+    <string name="piggy_cell_favourite_amount">30</string>
+    <string name="piggy_cell_starter">Копилка</string>
+    <string name="piggy_cell_starter_amount">0</string>
+    <string name="piggy_cell_dream">Мечта</string>
+    <string name="piggy_cell_dream_amount">1 675,50</string>
+    <string name="piggy_cell_dream_goal">из 3 000 ₽</string>
+    <string name="piggy_cell_done">Ура! Ты накопил\nна мечту</string>
+    <string name="piggy_cell_done_cta">Снять 7 989,32 ₽</string>
+    <string name="piggy_cell_shoes">Ботинки</string>
+    <string name="piggy_cell_shoes_amount">450,50</string>
+    <string name="piggy_cell_shoes_goal">из 500 ₽</string>
+    <string name="piggy_cell_slime">Слайм розовый</string>
+    <string name="piggy_cell_slime_amount">580</string>
+    <string name="piggy_cell_slime_goal">из 700 ₽</string>
+    <string name="piggy_cell_markers">Фломастеры от А4</string>
+    <string name="piggy_cell_markers_amount">100</string>
+    <string name="piggy_cell_markers_goal">из 200 ₽</string>
+    <string name="piggy_cell_band">Фитнес-браслет Xiaomi Mi Band 7</string>
+    <string name="piggy_cell_band_amount">1 800</string>
+    <string name="piggy_cell_band_goal">из 2 000 ₽</string>
+    <string name="piggy_cell_robot">Робот Макс</string>
+    <string name="piggy_cell_robot_amount">3 950</string>
+    <string name="piggy_cell_robot_goal">из 12 000 ₽</string>
+
+    <string name="piggy_total_caption">Всего на копилках</string>
+    <string name="piggy_carousel_1_title">Фитнес-браслет Xiaomi Mi Band 7</string>
+    <string name="piggy_carousel_1_amount">2 000 000 000</string>
+    <string name="piggy_carousel_2_title">Фитнес-браслет Xiaomi Mi Band 7</string>
+    <string name="piggy_carousel_2_amount">2 000</string>
+    <string name="piggy_carousel_3_title">Фитнес-браслет Xiaomi Mi Band 7</string>
+    <string name="piggy_carousel_3_amount">2 000</string>
+    <string name="piggy_others_title">На что копят другие</string>
+    <string name="piggy_add_money">Пополнить</string>
+
+    <string name="piggy_item_1_title">Ботинки</string>
+    <string name="piggy_item_1_amount">450 ₽</string>
+    <string name="piggy_item_2_title">Слайм розовый</string>
+    <string name="piggy_item_2_amount">580 ₽</string>
+    <string name="piggy_item_3_title">Фломастеры от А4</string>
+    <string name="piggy_item_3_amount">100 ₽</string>
+    <string name="piggy_item_4_title">Фитнес-браслет Xiaomi Mi Band 7</string>
+    <string name="piggy_item_4_amount">1 800 ₽</string>
+    <string name="piggy_item_5_title">Робот Макс</string>
+    <string name="piggy_item_5_amount">3 950 ₽</string>
+
+    <string name="tasks_banner_title">Начни делать дела</string>
+    <string name="tasks_banner_text">Выбери или придумай своё\nдело и выполни его за награду</string>
+    <string name="tasks_checklist_title">Чем заняться</string>
+    <string name="tasks_checklist_row">Собраться в школу</string>
+    <string name="tasks_checklist_progress">2 из 5</string>
+    <string name="tasks_card_1_title">Отмыть стену</string>
+    <string name="tasks_card_2_title">Отмыть стену</string>
+    <string name="tasks_card_2_subtitle">от художеств</string>
+    <string name="tasks_banner_cta">За дело!</string>
+    <string name="tasks_card_1_subtitle">от художеств</string>
+    <string name="tasks_more">А чё ещё есть?</string>
+    <string name="tasks_feed_title">Лента дел</string>
+
+    <string name="content_stream_title">Эфир Звука</string>
+    <string name="content_stream_subtitle">Три кота три хвоста</string>
+    <string name="content_banner_title">Исполни мечту</string>
+    <string name="content_banner_text">Участвуй в конкурсе юных\nпредпринимателей</string>
+    <string name="content_ad">Реклама · sberbank.ru</string>
+    <string name="content_top5_title">Топ 5 за неделю</string>
+    <string name="content_partners_title">Алгоритмика</string>
+    <string name="content_card_long">Короткое название в одну или даже\nв две строки максимум</string>
+    <string name="content_card_short">Короткое название в одну строку</string>
+    <string name="content_likes">999 тыс</string>
+    <string name="content_tag_video">видео</string>
+    <string name="content_tag_article">статья</string>
+    <string name="content_chip_all">Всё</string>
+    <string name="content_chip_popular">Популярное</string>
+    <string name="content_chip_new">Новое</string>
+
+    <string name="action_close">Закрыть</string>
+    <string name="action_scan_qr">Сканировать QR-код</string>
+    <string name="action_profile">Профиль</string>
+</resources>
