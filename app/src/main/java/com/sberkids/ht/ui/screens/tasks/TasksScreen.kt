@@ -18,7 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import com.sberkids.ht.ui.theme.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -91,19 +91,17 @@ private fun HeroBanner() {
                 .background(Surface),
         ) {
             Column(modifier = Modifier.padding(start = 25.dp, top = 29.dp)) {
-                Text(
+                AppText(
                     text = stringResource(R.string.tasks_banner_title),
                     fontSize = 18.sp,
                     lineHeight = 20.sp,
-                    fontWeight = FontWeight.Bold,
                     color = PrimaryText,
                 )
                 Spacer(Modifier.height(9.dp))
-                Text(
+                AppText(
                     text = stringResource(R.string.tasks_banner_text),
                     fontSize = 13.sp,
                     lineHeight = 16.sp,
-                    fontWeight = FontWeight.Medium,
                     color = TasksMuted,
                     modifier = Modifier.width(221.dp),
                 )
@@ -121,10 +119,9 @@ private fun HeroBanner() {
                 .background(Brush.linearGradient(*ButtonGradient)),
             contentAlignment = Alignment.Center,
         ) {
-            Text(
+            AppText(
                 text = stringResource(R.string.tasks_banner_cta),
                 fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
                 color = PrimaryText,
             )
         }
@@ -186,11 +183,10 @@ private fun ChecklistSection() {
             .background(Surface)
             .padding(top = 27.dp, bottom = 18.dp),
     ) {
-        Text(
+        AppText(
             text = stringResource(R.string.tasks_checklist_title),
             fontSize = 15.sp,
             lineHeight = 17.sp,
-            fontWeight = FontWeight.Bold,
             color = PrimaryText,
             modifier = Modifier
                 .padding(start = 23.dp)
@@ -208,11 +204,10 @@ private fun ChecklistSection() {
                 .background(TasksCardBg),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
+            AppText(
                 text = stringResource(R.string.tasks_checklist_row),
                 fontSize = 15.sp,
                 lineHeight = 17.sp,
-                fontWeight = FontWeight.Bold,
                 color = PrimaryText,
                 modifier = Modifier
                     .padding(start = 25.dp)
@@ -258,10 +253,9 @@ private fun ChecklistSection() {
                 .background(TasksMoreButton),
             contentAlignment = Alignment.Center,
         ) {
-            Text(
+            AppText(
                 text = stringResource(R.string.tasks_more),
                 fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
                 color = PrimaryText,
             )
         }
@@ -298,11 +292,10 @@ private fun TaskCardView(card: TaskCard) {
             .clip(RoundedCornerShape(20.dp))
             .background(TasksCardBg),
     ) {
-        Text(
+        AppText(
             text = card.title,
             fontSize = 16.sp,
             lineHeight = 17.sp,
-            fontWeight = FontWeight.Bold,
             color = PrimaryText,
             modifier = Modifier
                 .offset(x = 17.dp, y = 21.dp)

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import com.sberkids.ht.ui.theme.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
@@ -64,7 +64,7 @@ fun ProgressBar(
 
 @Composable
 fun Footnote(text: String, modifier: Modifier = Modifier, color: Color = TertiaryText) {
-    Text(text, modifier = modifier, fontSize = 12.sp, lineHeight = 14.sp, color = color)
+    AppText(text, modifier = modifier, fontSize = 12.sp, lineHeight = 14.sp, color = color)
 }
 
 @Composable
@@ -75,7 +75,7 @@ fun LabelChip(text: String, modifier: Modifier = Modifier, background: Color = T
             .background(background)
             .padding(horizontal = 8.dp, vertical = 4.dp),
     ) {
-        Text(text, fontSize = 11.sp, color = TertiaryText, maxLines = 1)
+        AppText(text, fontSize = 11.sp, color = TertiaryText, maxLines = 1)
     }
 }
 
@@ -89,11 +89,10 @@ fun SectionTitle(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
+        AppText(
             text = text,
             fontSize = 20.sp,
             lineHeight = 26.sp,
-            fontWeight = FontWeight.Bold,
             color = PrimaryText,
             modifier = Modifier.weight(1f),
         )

@@ -48,18 +48,18 @@ fun HomeBackground(modifier: Modifier = Modifier, content: @Composable BoxScope.
     Box(modifier = modifier.fillMaxSize().background(AppBackground)) {
         Blob(
             color = Color(0xFFE5FF43),
-            size = 320.dp,
-            modifier = Modifier.offset(x = 35.dp, y = 114.dp),
+            size = 380.dp,
+            modifier = Modifier.offset(x = 5.dp, y = 84.dp),
         )
         Blob(
             color = Color(0xFF87FF74),
-            size = 240.dp,
-            modifier = Modifier.offset(x = (-149).dp, y = 74.dp),
+            size = 300.dp,
+            modifier = Modifier.offset(x = (-179).dp, y = 44.dp),
         )
         Blob(
             color = Color(0xFF87FF74),
-            size = 240.dp,
-            modifier = Modifier.offset(x = 299.dp, y = 234.dp),
+            size = 300.dp,
+            modifier = Modifier.offset(x = 269.dp, y = 204.dp),
         )
         content()
     }
@@ -73,7 +73,7 @@ private fun Blob(color: Color, size: Dp, modifier: Modifier = Modifier) {
             .clip(CircleShape)
             .background(
                 Brush.radialGradient(
-                    colors = listOf(color.copy(alpha = 0.82f), color.copy(alpha = 0f)),
+                    colors = listOf(color.copy(alpha = 0.95f), color.copy(alpha = 0f)),
                 ),
             ),
     )

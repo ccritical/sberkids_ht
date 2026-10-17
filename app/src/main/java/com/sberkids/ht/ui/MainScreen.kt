@@ -39,7 +39,11 @@ import com.sberkids.ht.ui.screens.home.HomeScreen
 import com.sberkids.ht.ui.screens.piggybanks.PiggyBanksScreen
 import com.sberkids.ht.ui.screens.tasks.TasksScreen
 import com.sberkids.ht.ui.theme.AppBackground
-import com.sberkids.ht.ui.theme.Inter
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.em
+import com.sberkids.ht.ui.theme.MOCK_WEIGHT
+import com.sberkids.ht.ui.theme.MOCK_SPACING_EM
+import com.sberkids.ht.ui.theme.Inter14
 import com.sberkids.ht.ui.theme.SberKidsHtTheme
 
 @Composable
@@ -47,10 +51,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
     var selectedTab by rememberSaveable { mutableStateOf(MainTab.Home) }
 
 
-    // Every Text in the app inherits Inter from here, including call sites that
-    // only set fontSize/weight.
+    // Base style for anything that does not set a size. Sized text goes through
+    // AppText, which picks the optical size that matches its size.
     CompositionLocalProvider(
-        LocalTextStyle provides TextStyle(fontFamily = Inter),
+        LocalTextStyle provides TextStyle(
+            fontFamily = Inter14,
+            fontWeight = FontWeight(MOCK_WEIGHT),
+            letterSpacing = MOCK_SPACING_EM.em,
+        ),
     ) {
         Scaffold(
             modifier = modifier.fillMaxSize(),
