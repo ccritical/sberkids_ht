@@ -213,8 +213,16 @@ fun AnimatedPiggyIllustration(modifier: Modifier = Modifier) {
     LaunchedEffect(trigger) {
         if (trigger == 0) return@LaunchedEffect
 
-        time.snapTo(0f)
-        time.animateTo(1f, tween(timeline.durationMs, easing = LinearEasing))
+        // Play all moving frames at their original speed, skipping only the
+        // idle lead-in and tail in the shared 2.4s illustration timeline.
+        val shakeDurationMs = (
+            timeline.durationMs * (PIGGY_SHAKE_END_PROGRESS - PIGGY_SHAKE_START_PROGRESS)
+        ).roundToInt()
+        time.snapTo(PIGGY_SHAKE_START_PROGRESS)
+        time.animateTo(
+            PIGGY_SHAKE_END_PROGRESS,
+            tween(shakeDurationMs, easing = LinearEasing),
+        )
         time.snapTo(0f)
         completedShakes++
 
@@ -349,4 +357,6 @@ private const val RADIANS_TO_DEGREES = 57.29578f
 private const val TRIPLE_TAP_TIMEOUT_MS = 800L
 private const val PIGGY_SHAKE_TAP_COUNT = 3
 private const val PIGGY_SHAKES_BEFORE_BREAK = 3
+private const val PIGGY_SHAKE_START_PROGRESS = 0.06447f
+private const val PIGGY_SHAKE_END_PROGRESS = 0.73681f
 private const val PIGGY_BREAK_TRANSITION_MS = 160
