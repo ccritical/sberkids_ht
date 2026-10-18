@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalResources
@@ -170,32 +171,47 @@ private fun rememberTriggeredTimelineTime(
     return clock.asState()
 }
 
-/** Decorative overlay: Canvas has no pointer handlers, so scrolling and taps
- * pass through. Uniform scaling preserves the design's particle trajectories.
+/** Decorative charging effect: Lottie has no pointer handlers, so taps and
+ * scrolling pass through while the bolts rise across the full screen.
  */
 @Composable
-fun PopcornMotionOverlay(
+fun ChargingBoltsOverlay(
     modifier: Modifier = Modifier,
     trigger: Int = 0,
     lastStartedTrigger: Int = 0,
     onAnimationStarted: () -> Unit = {},
 ) {
-    val timeline = rememberIllustrationTimeline()
-    val time = rememberTriggeredTimelineTime(
-        durationMs = timeline.durationMs,
-        trigger = trigger,
-        shouldPlay = trigger > lastStartedTrigger,
-        onAnimationStarted = onAnimationStarted,
-    )
-    val popcorn = ImageBitmap.imageResource(R.drawable.motion_popcorn_sheet)
-    val nodes = remember(timeline) { timeline.nodes.filter { it.id.startsWith("6:") } }
-    Canvas(modifier.clipToBounds()) {
-        val designScale = size.width / 390f
-        withTransform({ scale(designScale, designScale, Offset.Zero) }) {
-            nodes.forEach { drawMotionNode(it, time.value, popcorn) }
-        }
+    val composition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.charging_bolts))
+    val animation = rememberLottieAnimatable()
+    val onAnimationStartedState = rememberUpdatedState(onAnimationStarted)
+
+    LaunchedEffect(trigger, composition.value) {
+        val loadedComposition = composition.value ?: return@LaunchedEffect
+        if (trigger <= lastStartedTrigger) return@LaunchedEffect
+
+        onAnimationStartedState.value()
+        animation.animate(loadedComposition, iterations = 1)
+    }
+
+    composition.value?.let { loadedComposition ->
+        LottieAnimation(
+            composition = loadedComposition,
+            progress = { animation.progress },
+            modifier = modifier.graphicsLayer {
+                // The source composition places several bolts beyond its own
+                // horizontal bounds. A slight uniform zoom reveals them at the
+                // screen edges; nudge the whole effect upward a little.
+                scaleX = CHARGING_BOLTS_SCALE
+                scaleY = CHARGING_BOLTS_SCALE
+                translationY = -size.height * CHARGING_BOLTS_VERTICAL_OFFSET
+            },
+            contentScale = ContentScale.Fit,
+        )
     }
 }
+
+private const val CHARGING_BOLTS_SCALE = 1.12f
+private const val CHARGING_BOLTS_VERTICAL_OFFSET = 0.035f
 
 /** 140 × 176 illustration with extra room around the break animation. */
 @Composable

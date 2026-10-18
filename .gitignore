@@ -3,6 +3,7 @@
 
 .gradle/
 .kotlin/
+.direnv/
 build/
 captures/
 .externalNativeBuild/
