@@ -7,11 +7,14 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -23,16 +26,23 @@ import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import com.sberkids.ht.R
+import androidx.compose.ui.unit.Constraints
 import android.os.SystemClock
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieAnimatable
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.sberkids.ht.R
 import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.math.roundToInt
@@ -187,18 +197,40 @@ fun PopcornMotionOverlay(
     }
 }
 
-/** Fixed 140 × 176 mask with independently moving piggy and sparkles. */
+/** 140 × 176 illustration with extra room around the break animation. */
 @Composable
 fun AnimatedPiggyIllustration(modifier: Modifier = Modifier) {
     val timeline = rememberIllustrationTimeline()
     var trigger by remember { mutableIntStateOf(0) }
-    var lastStartedTrigger by remember { mutableIntStateOf(0) }
-    val time = rememberTriggeredTimelineTime(
-        durationMs = timeline.durationMs,
-        trigger = trigger,
-        shouldPlay = trigger > lastStartedTrigger,
-        onAnimationStarted = { lastStartedTrigger = trigger },
-    )
+    var isAnimating by remember { mutableStateOf(false) }
+    var completedShakes by remember { mutableIntStateOf(0) }
+    var showBreakAnimation by remember { mutableStateOf(false) }
+    val time = remember { Animatable(0f) }
+    // Preload Lottie while the user taps and the shake animations play.
+    val breakComposition = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.piggy_break))
+    val breakAnimation = rememberLottieAnimatable()
+    val breakBlend = remember { Animatable(0f) }
+    LaunchedEffect(trigger) {
+        if (trigger == 0) return@LaunchedEffect
+
+        time.snapTo(0f)
+        time.animateTo(1f, tween(timeline.durationMs, easing = LinearEasing))
+        time.snapTo(0f)
+        completedShakes++
+
+        // Keep the input locked through the entire third shake and break.
+        if (completedShakes == PIGGY_SHAKES_BEFORE_BREAK) {
+            val composition = breakComposition.await()
+            breakAnimation.snapTo(composition, progress = 0f)
+            showBreakAnimation = true
+            breakBlend.animateTo(1f, tween(PIGGY_BREAK_TRANSITION_MS))
+            breakAnimation.animate(composition, iterations = 1)
+            breakBlend.animateTo(0f, tween(PIGGY_BREAK_TRANSITION_MS))
+            showBreakAnimation = false
+            completedShakes = 0
+        }
+        isAnimating = false
+    }
     val piggy = ImageBitmap.imageResource(R.drawable.motion_piggy)
     val sparkles = listOf(
         ImageBitmap.imageResource(R.drawable.motion_piggy_sparkle_1),
@@ -206,37 +238,79 @@ fun AnimatedPiggyIllustration(modifier: Modifier = Modifier) {
         ImageBitmap.imageResource(R.drawable.motion_piggy_sparkle_3),
     )
     val nodes = remember(timeline) { timeline.nodes.filter { !it.id.startsWith("6:") } }
-    Canvas(
+    Box(
         modifier
-            .clipToBounds()
             .pointerInput(Unit) {
                 var tapCount = 0
                 var lastTapAt = 0L
                 detectTapGestures {
+                    if (isAnimating) {
+                        // Taps during playback neither restart nor queue a shake.
+                        tapCount = 0
+                        lastTapAt = 0L
+                        return@detectTapGestures
+                    }
                     val now = SystemClock.uptimeMillis()
                     tapCount = if (now - lastTapAt > TRIPLE_TAP_TIMEOUT_MS) 1 else tapCount + 1
                     lastTapAt = now
-                    if (tapCount == 3) {
+                    if (tapCount == PIGGY_SHAKE_TAP_COUNT) {
+                        isAnimating = true
                         trigger++
                         tapCount = 0
+                        lastTapAt = 0L
                     }
                 }
             },
     ) {
-        withTransform({
-            scale(size.width / 140f, size.height / 176f, Offset.Zero)
-            translate(-220f, -112f)
-        }) {
-            // Figma stacking: the first sparkle is behind the pig.
-            nodes.forEach { node ->
-                val bitmap = when (node.id) {
-                    "33:24" -> piggy
-                    "2:9400" -> sparkles[0]
-                    "2:9405" -> sparkles[1]
-                    else -> sparkles[2]
+        Canvas(
+            Modifier.fillMaxSize().clipToBounds().graphicsLayer { alpha = 1f - breakBlend.value },
+        ) {
+            withTransform({
+                scale(size.width / 140f, size.height / 176f, Offset.Zero)
+                translate(-220f, -112f)
+            }) {
+                // Figma stacking: the first sparkle is behind the pig.
+                nodes.forEach { node ->
+                    val bitmap = when (node.id) {
+                        "33:24" -> piggy
+                        "2:9400" -> sparkles[0]
+                        "2:9405" -> sparkles[1]
+                        else -> sparkles[2]
+                    }
+                    drawMotionNode(node, time.value, bitmap)
                 }
-                drawMotionNode(node, time.value, bitmap)
             }
+        }
+        if (showBreakAnimation) {
+            LottieAnimation(
+                composition = breakComposition.value,
+                progress = { breakAnimation.progress },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .layout { measurable, constraints ->
+                        val scaleX = constraints.maxWidth / 140f
+                        val scaleY = constraints.maxHeight / 176f
+                        // The shared 344px pig is drawn at 172dp. In Lottie its
+                        // top-left is (268,341); the existing illustration uses
+                        // (-19,19). Map those exact bounds instead of fitting
+                        // the entire 880px composition into the illustration.
+                        // Let Lottie use its own composition bounds so the
+                        // scattered pieces can leave the resting pig's mask.
+                        val animation = measurable.measure(
+                            Constraints.fixed(
+                                (440f * scaleX).roundToInt(),
+                                (440f * scaleY).roundToInt(),
+                            ),
+                        )
+                        layout(constraints.maxWidth, constraints.maxHeight) {
+                            animation.place(
+                                (-153f * scaleX).roundToInt(),
+                                (-151.5f * scaleY).roundToInt(),
+                            )
+                        }
+                    }
+                    .graphicsLayer { alpha = breakBlend.value },
+            )
         }
     }
 }
@@ -273,3 +347,6 @@ private fun DrawScope.drawMotionNode(node: MotionNode, time: Float, bitmap: Imag
 
 private const val RADIANS_TO_DEGREES = 57.29578f
 private const val TRIPLE_TAP_TIMEOUT_MS = 800L
+private const val PIGGY_SHAKE_TAP_COUNT = 3
+private const val PIGGY_SHAKES_BEFORE_BREAK = 3
+private const val PIGGY_BREAK_TRANSITION_MS = 160

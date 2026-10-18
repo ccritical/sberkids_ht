@@ -132,13 +132,15 @@ fun PiggyBanksScreen(modifier: Modifier = Modifier) {
  * (220,112), so the block itself is 360x176; the white sum card is 328x120 with
  * its top at y=144, i.e. 32dp below the block top and 24dp above its bottom.
  * The piggy and three sparkles animate independently inside the fixed clip.
+ * An extra 40dp below the block fits the settled fragments (down to 211dp)
+ * before the next card starts.
  */
 @Composable
 private fun TotalCard() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(176.dp),
+            .height(216.dp),
     ) {
         Box(
             modifier = Modifier
