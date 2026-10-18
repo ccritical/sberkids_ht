@@ -18,17 +18,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.sberkids.ht.ui.theme.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sberkids.ht.R
@@ -38,6 +35,7 @@ import com.sberkids.ht.ui.components.ScreenBackground
 import com.sberkids.ht.ui.components.TintedIcon
 import com.sberkids.ht.ui.components.TopBarAction
 import com.sberkids.ht.ui.theme.AccentBlue
+import com.sberkids.ht.ui.theme.AppText
 import com.sberkids.ht.ui.theme.BlobBlue
 import com.sberkids.ht.ui.theme.BlobPurple
 import com.sberkids.ht.ui.theme.ButtonGradient
@@ -156,7 +154,6 @@ private fun HeroBanner() {
                 modifier = Modifier
                     .offset(x = 11.dp, y = 54.dp)
                     .size(width = 71.dp, height = 84.dp),
-                contentScale = ContentScale.FillBounds,
             )
         }
     }

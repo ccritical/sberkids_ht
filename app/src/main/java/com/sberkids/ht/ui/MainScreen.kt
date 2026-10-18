@@ -4,16 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,28 +29,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.sberkids.ht.R
-import androidx.compose.ui.res.stringResource
-import com.sberkids.ht.ui.components.MainTopBar
-import com.sberkids.ht.ui.components.TintedIcon
-import com.sberkids.ht.ui.components.TopBarAction
-import com.sberkids.ht.ui.theme.AccentGreen
+import androidx.compose.ui.unit.em
+import androidx.core.content.ContextCompat
 import com.sberkids.ht.ui.components.MainBottomBar
+import com.sberkids.ht.ui.components.PopcornMotionOverlay
 import com.sberkids.ht.ui.navigation.MainTab
 import com.sberkids.ht.ui.screens.content.ContentScreen
 import com.sberkids.ht.ui.screens.home.HomeScreen
 import com.sberkids.ht.ui.screens.piggybanks.PiggyBanksScreen
 import com.sberkids.ht.ui.screens.tasks.TasksScreen
 import com.sberkids.ht.ui.theme.AppBackground
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.em
-import androidx.core.content.ContextCompat
-import com.sberkids.ht.ui.theme.MOCK_WEIGHT
-import com.sberkids.ht.ui.theme.MOCK_SPACING_EM
 import com.sberkids.ht.ui.theme.Inter14
+import com.sberkids.ht.ui.theme.MOCK_SPACING_EM
+import com.sberkids.ht.ui.theme.MOCK_WEIGHT
 import com.sberkids.ht.ui.theme.SberKidsHtTheme
 
 @Composable
@@ -61,7 +51,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
     var selectedTab by rememberSaveable { mutableStateOf(MainTab.Home) }
     val popcornTrigger = rememberPowerConnectionTrigger()
     var popcornLastStartedTrigger by remember { mutableIntStateOf(0) }
-
 
     // Base style for anything that does not set a size. Sized text goes through
     // AppText, which picks the optical size that matches its size.
@@ -112,18 +101,22 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     label = "tabContent",
                 ) { tab ->
                     when (tab) {
-                        MainTab.Home -> HomeScreen(
-                            popcornTrigger = popcornTrigger,
-                            popcornLastStartedTrigger = popcornLastStartedTrigger,
-                            onPopcornAnimationStarted = {
-                                popcornLastStartedTrigger = popcornTrigger
-                            },
-                        )
+                        MainTab.Home -> HomeScreen()
                         MainTab.PiggyBanks -> PiggyBanksScreen()
                         MainTab.Tasks -> TasksScreen()
                         MainTab.Content -> ContentScreen()
                     }
                 }
+                // Keep the charge effect above every tab and outside tab
+                // transitions, so it starts immediately and survives navigation.
+                PopcornMotionOverlay(
+                    modifier = Modifier.matchParentSize(),
+                    trigger = popcornTrigger,
+                    lastStartedTrigger = popcornLastStartedTrigger,
+                    onAnimationStarted = {
+                        popcornLastStartedTrigger = popcornTrigger
+                    },
+                )
             }
         }
     }

@@ -25,6 +25,8 @@ their original stroke/render bounds are retained in the motion data.
 Playback uses the native Compose frame clock, pauses while the activity is not
 resumed and shows the resting frame when Android's animator duration scale is 0.
 The popcorn overlay is decorative and does not intercept touch or scroll input.
+It is hosted by `MainScreen`, outside the tab transition, so connecting power
+starts it immediately on any tab and navigation does not restart the effect.
 
 Set `JAVA_HOME` to a JDK 21 installation, then build and check:
 

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,19 +23,15 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.ui.res.painterResource
-import com.sberkids.ht.ui.theme.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +42,7 @@ import com.sberkids.ht.ui.components.ScreenBackground
 import com.sberkids.ht.ui.components.TintedIcon
 import com.sberkids.ht.ui.theme.AccentGreen
 import com.sberkids.ht.ui.theme.AccentPurple
+import com.sberkids.ht.ui.theme.AppText
 import com.sberkids.ht.ui.theme.BlobPurple
 import com.sberkids.ht.ui.theme.BlobPurpleLight
 import com.sberkids.ht.ui.theme.ContentProgressTrack
@@ -154,7 +152,6 @@ private fun HeroCarousel() {
                 Illustration(
                     resId = image,
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
                 )
             }
         }
@@ -183,7 +180,6 @@ private fun StoryCarousel() {
                     modifier = Modifier
                         .size(width = 80.dp, height = 100.dp)
                         .clip(RoundedCornerShape(20.dp)),
-                    contentScale = ContentScale.Crop,
                 )
                 Box(
                     modifier = Modifier
@@ -222,7 +218,6 @@ private fun StreamPlayer() {
                 .padding(start = 20.dp, top = 20.dp)
                 .size(100.dp)
                 .clip(RoundedCornerShape(20.dp)),
-            contentScale = ContentScale.Crop,
         )
         Column(
             modifier = Modifier
@@ -340,7 +335,6 @@ private fun ArticleCard(
                     .fillMaxWidth()
                     .height(164.dp * k)
                     .clip(RoundedCornerShape(20.dp)),
-                contentScale = ContentScale.Crop,
             )
             TagRow(y = 191.dp * k, scale = k)
             AppText(
@@ -483,7 +477,6 @@ private fun InfoBanner() {
                 .align(Alignment.TopEnd)
                 .offset(y = (-18).dp)
                 .size(width = 114.dp, height = 140.dp),
-            contentScale = ContentScale.Crop,
         )
         Column(modifier = Modifier.padding(start = 24.dp, top = 29.dp)) {
             AppText(
@@ -577,7 +570,6 @@ private fun SmallCard(image: Int, seen: Boolean) {
                 .width(148.dp)
                 .height(104.dp)
                 .clip(RoundedCornerShape(20.dp)),
-            contentScale = ContentScale.Crop,
         )
         Row(
             modifier = Modifier.offset(x = 17.dp, y = 131.dp),
@@ -634,7 +626,6 @@ private fun AlgoritmikaBlock() {
                 .align(Alignment.TopEnd)
                 .offset(y = (-24).dp)
                 .size(width = 148.dp, height = 129.dp),
-            contentScale = ContentScale.Fit,
         )
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -664,7 +655,6 @@ private fun PlaceholderCard() {
                 .fillMaxWidth()
                 .height(164.dp)
                 .clip(RoundedCornerShape(20.dp)),
-            contentScale = ContentScale.Crop,
         )
         TagRow(y = 191.dp)
         AppText(

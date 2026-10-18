@@ -17,45 +17,39 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.sberkids.ht.ui.theme.AppText
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sberkids.ht.R
 import com.sberkids.ht.ui.components.HomeBackground
 import com.sberkids.ht.ui.components.Illustration
 import com.sberkids.ht.ui.components.MainTopBar
-import com.sberkids.ht.ui.components.PopcornMotionOverlay
 import com.sberkids.ht.ui.components.TintedIcon
 import com.sberkids.ht.ui.theme.AccentBlue
 import com.sberkids.ht.ui.theme.AccentGreen
 import com.sberkids.ht.ui.theme.AccentGreenText
 import com.sberkids.ht.ui.theme.AccentPurple
+import com.sberkids.ht.ui.theme.AppText
+import com.sberkids.ht.ui.theme.BannerGradient
 import com.sberkids.ht.ui.theme.BlobMint
 import com.sberkids.ht.ui.theme.BlobPink
-import com.sberkids.ht.ui.theme.BlobYellow
-import com.sberkids.ht.ui.theme.BannerGradient
-import com.sberkids.ht.ui.theme.bannerBrush
 import com.sberkids.ht.ui.theme.BonusPill
 import com.sberkids.ht.ui.theme.HistoryBadge
 import com.sberkids.ht.ui.theme.HistoryIcon
@@ -63,14 +57,10 @@ import com.sberkids.ht.ui.theme.PrimaryText
 import com.sberkids.ht.ui.theme.SecondaryText
 import com.sberkids.ht.ui.theme.Surface
 import com.sberkids.ht.ui.theme.TertiaryText
+import com.sberkids.ht.ui.theme.bannerBrush
 
 @Composable
-fun HomeScreen(
-    modifier: Modifier = Modifier,
-    popcornTrigger: Int = 0,
-    popcornLastStartedTrigger: Int = 0,
-    onPopcornAnimationStarted: () -> Unit = {},
-) {
+fun HomeScreen(modifier: Modifier = Modifier) {
     HomeBackground(modifier = modifier) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -94,12 +84,6 @@ fun HomeScreen(
             item { Spacer(Modifier.height(15.dp)) }
             item { HistoryBlock() }
         }
-        PopcornMotionOverlay(
-            modifier = Modifier.matchParentSize(),
-            trigger = popcornTrigger,
-            lastStartedTrigger = popcornLastStartedTrigger,
-            onAnimationStarted = onPopcornAnimationStarted,
-        )
     }
 }
 
