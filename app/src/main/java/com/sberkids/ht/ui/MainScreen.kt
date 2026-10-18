@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.em
 import androidx.core.content.ContextCompat
 import com.sberkids.ht.ui.components.MainBottomBar
 import com.sberkids.ht.ui.components.ChargingBoltsOverlay
+import com.sberkids.ht.ui.components.PopcornMotionOverlay
 import com.sberkids.ht.ui.navigation.MainTab
 import com.sberkids.ht.ui.screens.content.ContentScreen
 import com.sberkids.ht.ui.screens.home.HomeScreen
@@ -53,6 +54,9 @@ import com.sberkids.ht.ui.theme.SberKidsHtTheme
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     var selectedTab by rememberSaveable { mutableStateOf(MainTab.Home) }
+    var completedGoalWithdrawn by rememberSaveable { mutableStateOf(false) }
+    var popcornTrigger by remember { mutableIntStateOf(0) }
+    var popcornLastStartedTrigger by remember { mutableIntStateOf(0) }
     val chargingTrigger = rememberPowerConnectionTrigger()
     var chargingLastStartedTrigger by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
@@ -108,12 +112,31 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     ) { tab ->
                         when (tab) {
                             MainTab.Home -> HomeScreen()
-                            MainTab.PiggyBanks -> PiggyBanksScreen()
+                            MainTab.PiggyBanks -> PiggyBanksScreen(
+                                showCompletedGoal = !completedGoalWithdrawn,
+                                onWithdrawClick = {
+                                    if (!completedGoalWithdrawn) {
+                                        completedGoalWithdrawn = true
+                                        popcornTrigger++
+                                    }
+                                },
+                            )
                             MainTab.Tasks -> TasksScreen()
                             MainTab.Content -> ContentScreen()
                         }
                     }
                 }
+            }
+
+            // Only the completed goal's withdrawal button triggers popcorn.
+            // Leaving savings cancels playback without replaying it on return.
+            if (selectedTab == MainTab.PiggyBanks) {
+                PopcornMotionOverlay(
+                    modifier = Modifier.matchParentSize(),
+                    trigger = popcornTrigger,
+                    lastStartedTrigger = popcornLastStartedTrigger,
+                    onAnimationStarted = { popcornLastStartedTrigger = popcornTrigger },
+                )
             }
 
             // Draw above the entire scaffold, including its bottom navigation.

@@ -1,6 +1,13 @@
 package com.sberkids.ht.ui.screens.piggybanks
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sberkids.ht.R
@@ -68,7 +76,11 @@ private data class PiggyCell(
 )
 
 @Composable
-fun PiggyBanksScreen(modifier: Modifier = Modifier) {
+fun PiggyBanksScreen(
+    modifier: Modifier = Modifier,
+    showCompletedGoal: Boolean = true,
+    onWithdrawClick: () -> Unit = {},
+) {
     ScreenBackground(
         primary = BlobPinkSoft,
         secondary = BlobYellow,
@@ -101,8 +113,19 @@ fun PiggyBanksScreen(modifier: Modifier = Modifier) {
             item {
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     cells.forEachIndexed { index, cell ->
-                        PiggyCellCard(cell)
-                        if (index < cells.lastIndex) Spacer(Modifier.height(16.dp))
+                        AnimatedVisibility(
+                            visible = !cell.isDone || showCompletedGoal,
+                            enter = EnterTransition.None,
+                            exit = fadeOut(tween(180)) + shrinkVertically(
+                                animationSpec = tween(360, easing = FastOutSlowInEasing),
+                                shrinkTowards = Alignment.Top,
+                            ),
+                        ) {
+                            Column {
+                                PiggyCellCard(cell, onWithdrawClick = onWithdrawClick)
+                                if (index < cells.lastIndex) Spacer(Modifier.height(16.dp))
+                            }
+                        }
                     }
                 }
             }
@@ -212,7 +235,7 @@ private fun AllPiggyRow() {
  *   the "favourite"/"starter" cells instead put the caption under the amount
  */
 @Composable
-private fun PiggyCellCard(cell: PiggyCell) {
+private fun PiggyCellCard(cell: PiggyCell, onWithdrawClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -276,7 +299,8 @@ private fun PiggyCellCard(cell: PiggyCell) {
                         .width(130.dp)
                         .height(24.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Brush.linearGradient(*ButtonGradient)),
+                        .background(Brush.linearGradient(*ButtonGradient))
+                        .clickable(role = Role.Button, onClick = onWithdrawClick),
                     contentAlignment = Alignment.Center,
                 ) {
                     AppText(

@@ -171,6 +171,33 @@ private fun rememberTriggeredTimelineTime(
     return clock.asState()
 }
 
+/** Decorative savings effect. Canvas has no pointer handlers, so taps and
+ * scrolling pass through; uniform scaling preserves the particle trajectories.
+ */
+@Composable
+fun PopcornMotionOverlay(
+    modifier: Modifier = Modifier,
+    trigger: Int = 0,
+    lastStartedTrigger: Int = 0,
+    onAnimationStarted: () -> Unit = {},
+) {
+    val timeline = rememberIllustrationTimeline()
+    val time = rememberTriggeredTimelineTime(
+        durationMs = timeline.durationMs,
+        trigger = trigger,
+        shouldPlay = trigger > lastStartedTrigger,
+        onAnimationStarted = onAnimationStarted,
+    )
+    val popcorn = ImageBitmap.imageResource(R.drawable.motion_popcorn_sheet)
+    val nodes = remember(timeline) { timeline.nodes.filter { it.id.startsWith("6:") } }
+    Canvas(modifier.clipToBounds()) {
+        val designScale = size.width / 390f
+        withTransform({ scale(designScale, designScale, Offset.Zero) }) {
+            nodes.forEach { drawMotionNode(it, time.value, popcorn) }
+        }
+    }
+}
+
 /** Decorative charging effect: Lottie has no pointer handlers, so taps and
  * scrolling pass through while the bolts rise across the full screen.
  */
